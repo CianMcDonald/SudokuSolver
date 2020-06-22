@@ -1,24 +1,32 @@
 import numpy as np
 
 # board[x][y]
-grid = [
-    [5, 3, 4, 6, 7, 0, 0, 1, 2],
+board = [
+    [5, 3, 4, 6, 0, 0, 0, 1, 2],
     [6, 0, 0, 1, 9, 5, 3, 4, 8],
-    [1, 9, 8, 0, 4, 2, 0, 6, 7],
-    [8, 5, 9, 0, 6, 0, 4, 2, 3],
-    [4, 0, 0, 8, 0, 3, 7, 0, 1],
-    [7, 0, 0, 0, 2, 0, 8, 5, 6],
-    [9, 6, 0, 0, 0, 7, 2, 8, 0],
-    [0, 9, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 5, 0, 8, 0, 1, 7, 9]
+    [1, 9, 0, 0, 4, 2, 0, 6, 7],
+    [8, 5, 0, 0, 6, 0, 4, 2, 3],
+    [0, 0, 0, 8, 0, 3, 7, 0, 1],
+    [0, 0, 0, 0, 2, 0, 8, 5, 6],
+    [0, 6, 0, 0, 0, 0, 0, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 5, 0, 0, 0, 1, 0, 0]
 ]
-global board
 
 
-def main():
+def solve():
     global board
-    board = np.array(grid)
-    print(board[0][4])
+    for row in range(9):
+        for col in range(9):
+            if board[row][col] == 0:
+                for n in range(1, 10):
+                    if selector(row, col, n):
+                        board[row][col] = n
+                        solve()
+                        board[row][col] = 0
+                return
+    print(np.array(board))
+    input()
 
 
 def selector(x, y, n):
@@ -30,8 +38,13 @@ def selector(x, y, n):
         if board[num][y] == n:
             return False
         # check square
+    x = (x // 3) * 3
+    y = (y // 3) * 3
+    for row in range(x, x + 3):
+        for col in range(y, y + 3):
+            if board[row][col] == n:
+                return False
     return True
 
 
-if __name__ == "__main__":
-    main()
+solve()
